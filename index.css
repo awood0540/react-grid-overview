@@ -29,8 +29,8 @@ left: 41px;
 position: relative;
 }
 .empimg{
-height: 27px;
-width: 29px;
+height: 28px;
+width: 28px;
 border-radius: 14px;
 }
 #overviewgrid.e-rtl #Emptext{
@@ -41,13 +41,13 @@ border-radius: 14px;
 
 .e-userimg.sf-icon-Male::before,
 .e-userimg.sf-icon-FeMale::before{
-    font-size: 13px;
+    font-size: 26px;
 }
 .e-userimg.sf-icon-Male, .e-userimg.sf-icon-FeMale {  
     margin: 0px 8px;
     line-height: 26px;
     color: white; 
-    font-size: 13px;
+    font-size: 18px;
 }
 
 .e-userimg.sf-icon-Male::before{
@@ -85,38 +85,38 @@ border-radius: 14px;
 }
 
 .e-image {
-    height: 13px;
+    height: 14px;
     width: 14px;
 }
 
 td.e-rowcell .statustxt.e-activecolor {
-    color: #00cc00;
+    color: #ffffff;
     position: relative;
-    top: 9px;
+    top: 10px;
 }
 
 td.e-rowcell .statustxt.e-inactivecolor {
-    color: #e60000;
+    color: #ffffff;
     position: relative;
-    top: 9px;
+    top: 10px;
 }
 
 .statustemp.e-inactivecolor {
-    background-color: #ffd7cc;
-    width: 64px;
+    background-color: #a0a0a0;
+    width: 65px;
 }
 
 .statustemp.e-activecolor {
-    background-color: #ccffcc;
-    width: 57px;
+    background-color: #43a775;
+    width: 65px;
 }
 
 .statustxt.e-activecolor {
-    color: #00cc00;
+    color: #ffffff;
 }
 
 .statustxt.e-inactivecolor {
-    color: #e60000;
+    color: #ffffff;
 }
 
 .statustemp {
@@ -169,10 +169,10 @@ td.e-rowcell .statustxt.e-inactivecolor {
     position: absolute;
     width: 10%;
     height: 100%;
-    background-color: #00b300;
+    background-color: #e6fdf2;
   }
   #myBar.progressdisable {
-    background-color: #df2222;
+    background-color: #43a775;
   }
   #label {
     position: relative;

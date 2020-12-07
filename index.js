@@ -1,16 +1,18 @@
 import { render } from 'react-dom';
 import './index.css';
 import * as React from 'react';
-import { closest, isNullOrUndefined } from '@syncfusion/ej2-base';
-import { GridComponent, ColumnsDirective, ColumnDirective, Filter, Inject, VirtualScroll, Sort } from '@syncfusion/ej2-react-grids';
-import { DropDownListComponent } from '@syncfusion/ej2-react-dropdowns';
+import { classList, Animation, createElement, closest, isNullOrUndefined } from '@syncfusion/ej2-base';
+import { GridComponent, ColumnsDirective, ColumnDirective, Filter, Inject, Sort, Reorder, Page, Resize, Toolbar, ColumnChooser, Selection } from '@syncfusion/ej2-react-grids';
+import { ToolbarComponent, ItemsDirective, ItemDirective } from '@syncfusion/ej2-react-navigations';
+import { ButtonComponent } from '@syncfusion/ej2-react-buttons';
+import { DatePickerComponent } from '@syncfusion/ej2-react-calendars';
 import { SampleBase } from './sample-base';
 import { getData } from './data';
 
 function statusTemplate(props) {
     return (<div id="status" className="statustemp">
-  <span className="statustxt">{props.Status}</span>
-</div>);
+            <span className="statustxt">{props.Status}</span>
+      </div>);
 }
 function ratingTemplate(props) {
     return (<div className="rating">
@@ -30,7 +32,7 @@ function progessTemplate(props) {
 }
 let loc = { width: '31px', height: '24px' };
 function trustTemplate(props) {
-    var Trustworthiness = props.Trustworthiness == "Sufficient" ? 'https://ej2.syncfusion.com/react/demos/src/grid/images/Sufficient.png' : props.Trustworthiness == "Insufficient" ? 'src/grid/images/Insufficient.png' : 'src/grid/images/Perfect.png';
+    var Trustworthiness = props.Trustworthiness == "Sufficient" ? 'https://ej2.syncfusion.com/react/demos/src/grid/images/Sufficient.png' : props.Trustworthiness == "Insufficient" ? 'https://ej2.syncfusion.com/react/demos/src/grid/images/Insufficient.png' : 'https://ej2.syncfusion.com/react/demos/src/grid/images/Perfect.png';
     return (<div> <img style={loc} src={Trustworthiness}/>
   <span id="Trusttext">{props.Trustworthiness}</span></div>);
 }
@@ -84,6 +86,12 @@ function statusdetails(props) {
           </div>);
     }
 }
+function toolbarButton1() {
+          return (<ButtonComponent>Only My Candidates</ButtonComponent>);
+        }
+function toolbarDatepicker() {
+          return (<DatePickerComponent></DatePickerComponent>);
+        }
 export class OverView extends SampleBase {
     constructor() {
         super(...arguments);
@@ -92,13 +100,8 @@ export class OverView extends SampleBase {
         this.isDataBound = false;
         this.isDataChanged = true;
         this.dropSlectedIndex = null;
-        this.ddlData = [
-            { text: '1,000 Rows and 11 Columns', value: '1000' },
-            { text: '10,000 Rows and 11 Columns', value: '10000' },
-            { text: '1,00,000 Rows and 11 Columns', value: '100000' }
-        ];
         this.fields = { text: 'text', value: 'value' };
-        this.getTradeData = getData(1000);
+        this.getTradeData = getData(25000);
         this.check = {
             type: 'CheckBox'
         };
@@ -122,7 +125,39 @@ export class OverView extends SampleBase {
             type: 'CheckBox',
             itemTemplate: ratingDetails
         };
-    }
+        this.toolbarOptions = [
+                {text:'Search', tooltipText:'Search for Candidates', align: 'Left'},
+                {text:'Activity Since', align:'Left'},  
+                {template:toolbarDatepicker, align:'Left'},
+                {template:toolbarButton1, align:'Right'},
+                {text:'ColumnChooser', align:'Right'},
+                {prefixIcon:'e-bold-icon tb-icons', tooltipText:'Bold', align:'Center'},
+                {prefixIcon:'F_PV_AnnotationEdit', tooltipText:'Underline'},
+                {prefixIcon:'e-italic-icon tb-icons', tooltipText:'Italic'},
+                {prefixIcon:'e-color-icon tb-icons', tooltipText:'Color-Picker'},
+                {type:'Separator'},
+                {prefixIcon:'e-alignleft-icon tb-icons', tooltipText:'Align_Left'},
+                {prefixIcon:'e-alignright-icon tb-icons', tooltipText:'Align_Right'},
+                {type:'Separator'},
+                {prefixIcon:'e-aligncenter-icon tb-icons', tooltipText:'Align_Center'},
+                {prefixIcon:'e-alignjustify-icon tb-icons', tooltipText:'Align_Justify'},
+                {type:'Separator'},
+                {prefixIcon:'e-bullets-icon tb-icons', tooltipText:'Bullets'},
+                {prefixIcon:'e-numbering-icon tb-icons', tooltipText:'Numbering'},
+                {type:'Separator'},
+                {prefixIcon:'e-bullets-icon tb-icons', tooltipText:'Bullets'},
+                {prefixIcon:'e-numbering-icon tb-icons', tooltipText:'Numbering'},
+                {type:'Separator'},
+                {prefixIcon:'e-ascending-icon tb-icons', tooltipText:'Sort A - Z'},
+                {prefixIcon:'e-descending-icon tb-icons', tooltipText:'Sort Z - A'},
+                {type:'Separator'},
+                {prefixIcon:'e-indent-icon tb-icons', tooltipText:'Text Indent'},
+                {prefixIcon:'e-outdent-icon tb-icons', tooltipText:'Text Outdent'},
+                {type:'Separator'},
+                {prefixIcon:'e-clear-icon tb-icons', tooltipText:'Clear'},
+                {prefixIcon:'e-reload-icon tb-icons', tooltipText:'Reload'},
+                {prefixIcon:'e-export-icon tb-icons', tooltipText:'Export'},
+        ]};
     onQueryCellInfo(args) {
         if (args.column.field === 'Employees') {
             if (args.data.EmployeeImg === 'usermale') {
@@ -197,43 +232,32 @@ export class OverView extends SampleBase {
         document.getElementById('overviewgrid').ej2_instances[0].on('data-ready', () => {
             this.dReady = true;
             this.stTime = performance.now();
-        });
-        document.getElementById('overviewgrid').addEventListener('DOMSubtreeModified', () => {
-            if (this.dReady && this.stTime && this.isDataChanged) {
-                let msgEle = document.getElementById('msg');
-                let val = (performance.now() - this.stTime).toFixed(0);
-                this.stTime = null;
-                this.dReady = false;
-                this.dtTime = false;
-                this.isDataChanged = false;
-                msgEle.classList.remove('e-hide');
-            }
+            const rowHeight = this.gridInstance.getRowHeight();
+            const gridHeight = this.gridInstance.height;
+            const pageSize = this.gridInstance.pageSettings.pageSize;
+            const pageResize = (gridHeight - (pageSize * rowHeight)) / rowHeight;
+            this.gridInstance.pageSettings.pageSize = pageSize + Math.round(pageResize);
         });
     }
     render() {
         return (<div className='control-pane'>
         <div className='control-section'>
-        <div>
-        <DropDownListComponent id="games" width='220' dataSource={this.ddlData} index={0} ref={(dropdownlist) => { this.ddObj = dropdownlist; }} fields={this.fields} change={this.onChange.bind(this)} placeholder="Select a Data Range" popupHeight="240px"/>
-        <span id='msg'></span>
-        <br />
-        </div>
-          <GridComponent id="overviewgrid" dataSource={this.getTradeData} enableHover={true} enableVirtualization={true} rowHeight={38} height='800' ref={(g) => { this.gridInstance = g; }} actionComplete={this.onComplete.bind(this)} load={this.onLoad.bind(this)} queryCellInfo={this.onQueryCellInfo.bind(this)} dataBound={this.onDataBound.bind(this)} filterSettings={this.Filter} allowFiltering={true} allowSorting={true} allowSelection={true} selectionSettings={this.select}>
+          <GridComponent id="overviewgrid" dataSource={this.getTradeData} enableHover={true} rowHeight={38} height='775' ref={(g) => { this.gridInstance = g; }} actionComplete={this.onComplete.bind(this)} load={this.onLoad.bind(this)} queryCellInfo={this.onQueryCellInfo.bind(this)} dataBound={this.onDataBound.bind(this)} filterSettings={this.Filter} allowFiltering={true} allowSorting={true} allowSelection={true} selectionSettings={this.select} toolbar={this.toolbarOptions} showColumnChooser={true} allowReordering={true} allowResizing={true} allowPaging={true}>
             <ColumnsDirective>
-            <ColumnDirective type='checkbox' allowSorting={false} allowFiltering={false} width='60'></ColumnDirective>
+             <ColumnDirective type='checkbox' allowSorting={false} allowFiltering={false} width='45'></ColumnDirective>
               <ColumnDirective field='EmployeeID' visible={false} headerText='Employee ID' isPrimaryKey={true} width='130'></ColumnDirective>
-              <ColumnDirective field='Employees' headerText='Employee Name' width='230' clipMode='EllipsisWithTooltip' template={empTemplate} filter={this.check}/>
-              <ColumnDirective field='Designation' headerText='Designation' width='170' filter={this.check} clipMode='EllipsisWithTooltip'/>
+              <ColumnDirective field='Employees' headerText='Candidate Name' width='230' clipMode='EllipsisWithTooltip' template={empTemplate} filter={this.check}/>
+              <ColumnDirective field='Designation' headerText='Job Title' width='170' filter={this.check} clipMode='EllipsisWithTooltip'/>
               <ColumnDirective field='Mail' headerText='Mail' filter={this.Filter} width='230'></ColumnDirective>
-              <ColumnDirective field='Location' headerText='Location' width='140' filter={this.check} template={coltemplate}></ColumnDirective>
+              <ColumnDirective field='Location' headerText='Phone' width='140' filter={this.check} template={coltemplate}></ColumnDirective>
               <ColumnDirective field='Status' headerText='Status' filter={this.status} template={statusTemplate} width='130'></ColumnDirective>
-              <ColumnDirective field='Trustworthiness' filter={this.trust} headerText='Trustworthiness' template={trustTemplate} width='160'></ColumnDirective>
-              <ColumnDirective field='Rating' headerText='Rating' filter={this.rating} template={ratingTemplate} width='160'/>
+              <ColumnDirective field='Trustworthiness' filter={this.trust} headerText='LTV' template={trustTemplate} width='160'></ColumnDirective>
+              <ColumnDirective field='Rating' headerText='Potential' filter={this.rating} template={ratingTemplate} width='160'/>
               <ColumnDirective field='Software' allowFiltering={false} allowSorting={false} headerText='Software Proficiency' width='180' template={progessTemplate} format='C2'/>
               <ColumnDirective field='CurrentSalary' headerText='Current Salary' filter={this.Filter} width='160' format='C2'></ColumnDirective>
               <ColumnDirective field='Address' headerText='Address' width='240' filter={this.Filter} clipMode="EllipsisWithTooltip"></ColumnDirective>
             </ColumnsDirective>
-            <Inject services={[Filter, VirtualScroll, Sort]}/>
+            <Inject services={[Filter, Sort, Toolbar, ColumnChooser, Reorder, Resize, Page, Selection ]}/>
           </GridComponent>
         </div>  
         <style>
@@ -244,4 +268,4 @@ export class OverView extends SampleBase {
     }
 }
 
-render(<OverView />, document.getElementById('sample'));
+render(<OverView />, document.getElementById('candidategrid'));
