@@ -229,7 +229,7 @@ export class OverView extends SampleBase {
         }, 100);
     }
     onLoad(args) {
-        document.getElementById('overviewgrid').ej2_instances[0].on('data-ready', () => {
+        document.getElementById('candidategrid').ej2_instances[0].on('data-ready', () => {
             this.dReady = true;
             this.stTime = performance.now();
             const rowHeight = this.gridInstance.getRowHeight();
@@ -242,7 +242,7 @@ export class OverView extends SampleBase {
     render() {
         return (<div className='control-pane'>
         <div className='control-section'>
-          <GridComponent id="overviewgrid" dataSource={this.getTradeData} enableHover={true} rowHeight={38} height='775' ref={(g) => { this.gridInstance = g; }} actionComplete={this.onComplete.bind(this)} load={this.onLoad.bind(this)} queryCellInfo={this.onQueryCellInfo.bind(this)} dataBound={this.onDataBound.bind(this)} filterSettings={this.Filter} allowFiltering={true} allowSorting={true} allowSelection={true} selectionSettings={this.select} toolbar={this.toolbarOptions} showColumnChooser={true} allowReordering={true} allowResizing={true} allowPaging={true}>
+          <GridComponent id="candidategrid" dataSource={this.getTradeData} enableHover={true} rowHeight={38} height= {1200} ref={(g) => { this.gridInstance = g; }} actionComplete={this.onComplete.bind(this)} load={this.onLoad.bind(this)} queryCellInfo={this.onQueryCellInfo.bind(this)} dataBound={this.onDataBound.bind(this)} filterSettings={this.Filter} allowFiltering={true} allowSorting={true} allowSelection={true} selectionSettings={this.select} toolbar={this.toolbarOptions} showColumnChooser={true} allowReordering={true} allowResizing={true} allowPaging={true}>
             <ColumnsDirective>
              <ColumnDirective type='checkbox' allowSorting={false} allowFiltering={false} width='45'></ColumnDirective>
               <ColumnDirective field='EmployeeID' visible={false} headerText='Employee ID' isPrimaryKey={true} width='130'></ColumnDirective>
@@ -261,11 +261,11 @@ export class OverView extends SampleBase {
           </GridComponent>
         </div>  
         <style>
-            @import 'src/grid/Grid/style.css';
+            @import './index.css';
         </style>
 
 </div>);
     }
 }
 
-render(<OverView />, document.getElementById('candidategrid'));
+render(<OverView />, document.getElementById('candidategridcontainer'));
